@@ -28,11 +28,9 @@ Add your sites to the `sites` table before accepting leads.
 ## Usage
 
 ```ts
-import { createLeadsClient, submitLead } from "@leads/supabase-backend";
+import { submitLead } from "@leads/supabase-backend";
 
-const client = createLeadsClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-const result = await submitLead(client, {
+const result = await submitLead(SUPABASE_URL, SUPABASE_ANON_KEY, {
   siteId: "my-site",
   contactValue: "user@example.com",
 });
@@ -43,7 +41,7 @@ const result = await submitLead(client, {
 `contactType` defaults to `email` but can be anything — `phone`, `twitter`, `discord`, etc. There's no enforced list; just be consistent across your sites.
 
 ```ts
-await submitLead(client, {
+await submitLead(SUPABASE_URL, SUPABASE_ANON_KEY, {
   siteId: "my-site",
   contactType: "phone",
   contactValue: "+1 555 000 0000",
@@ -62,7 +60,6 @@ await submitLead(client, {
 
 ```
 src/
-  client.ts    — typed Supabase client
   submit.ts    — submitLead()
   types.ts     — generated database types
 supabase/

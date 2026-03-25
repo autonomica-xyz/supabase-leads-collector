@@ -1,8 +1,6 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "./types";
-
 export async function submitLead(
-  client: SupabaseClient<Database>,
+  supabaseUrl: string,
+  supabaseAnonKey: string,
   {
     siteId,
     contactType,
@@ -15,14 +13,25 @@ export async function submitLead(
     metadata?: Record<string, unknown>;
   },
 ) {
-  const { error } = await client.from("leads").insert({
-    site_id: siteId,
-    contact_type: contactType || "email",
-    contact_value: contactValue.trim(),
-    metadata: metadata || {},
+  const res = await fetch(`${supabaseUrl}/rest/v1/leads`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      apikey: supabaseAnonKey,
+      Authorization: `Bearer ${supabaseAnonKey}`,
+      Prefer: "return=minimal",
+    },
+    body: JSON.stringify({
+      site_id: siteId,
+      contact_type: contactType ?? "email",
+      contact_value: contactValue.trim(),
+      metadata: metadata ?? {},
+    }),
   });
 
-  if (error?.code === "23505") return { status: "duplicate" } as const;
-  if (error) return { status: "error", message: error.message } as const;
-  return { status: "ok" } as const;
+  if (res.ok) return { status: "ok" } as const;
+
+  const body = await res.json().catch(() => null);
+  if (body?.code === "23505") return { status: "duplicate" } as const;
+  return { status: "error", message: body?.message ?? res.statusText } as const;
 }
