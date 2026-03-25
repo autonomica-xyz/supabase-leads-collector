@@ -1,4 +1,4 @@
-# supabase-backend
+# Supabase leads collector
 
 A shared Supabase backend for collecting leads across multiple landing pages. Instead of each site managing its own database, they all write to one place.
 
