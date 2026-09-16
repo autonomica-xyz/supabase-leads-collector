@@ -6,7 +6,7 @@ A shared Supabase backend for collecting leads across multiple landing pages. In
 
 Two tables:
 
-- `sites` — a registry of known sites (e.g. `autonomica`, `enclava`)
+- `sites` — a registry of known sites (e.g. `autonomica`, `enclava-ai`, `enclava-dev`, `freedom-cash`)
 - `leads` — contact submissions tagged with which site they came from
 
 Each lead has a `site_id`, a `contact_type` (defaults to `email`), and a `contact_value`. Duplicate submissions are silently ignored.
@@ -21,9 +21,9 @@ Apply the migration to your Supabase project:
 supabase db push
 ```
 
-Or run the SQL directly from `supabase/migrations/001_create_leads.sql`.
+Or run the SQL directly from `supabase/migrations/`.
 
-Add your sites to the `sites` table before accepting leads.
+Add your sites to the `sites` table before accepting leads. Enclava's two brands use `enclava-ai` and `enclava-dev`; older rows may still be tagged `enclava`.
 
 ## Usage
 
